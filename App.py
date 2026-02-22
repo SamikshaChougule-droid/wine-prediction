@@ -11,10 +11,12 @@ import streamlit as st
 import pandas as pd
 import joblib
 
+# Load model
 model = joblib.load("dtc_model.pkl")
 
 st.title("Wine Type Prediction")
 
+# Inputs
 fixed_acidity = st.number_input("fixed_acidity")
 volatile_acidity = st.number_input("volatile_acidity")
 citric_acid = st.number_input("citric_acid")
@@ -27,25 +29,31 @@ pH = st.number_input("pH")
 sulphates = st.number_input("sulphates")
 alcohol = st.number_input("alcohol")
 
-input_data = pd.DataFrame({
-    "fixed_acidity": [fixed_acidity],
-    "volatile_acidity": [volatile_acidity],
-    "citric_acid": [citric_acid],
-    "residual_sugar": [residual_sugar],
-    "chlorides": [chlorides],
-    "free_sulfur_dioxide": [free_sulfur_dioxide],
-    "total_sulfur_dioxide": [total_sulfur_dioxide],
-    "density": [density],
-    "pH": [pH],
-    "sulphates": [sulphates],
-    "alcohol": [alcohol]
-})
+# Create dataframe
+input_dict = {
+    "fixed_acidity": fixed_acidity,
+    "volatile_acidity": volatile_acidity,
+    "citric_acid": citric_acid,
+    "residual_sugar": residual_sugar,
+    "chlorides": chlorides,
+    "free_sulfur_dioxide": free_sulfur_dioxide,
+    "total_sulfur_dioxide": total_sulfur_dioxide,
+    "density": density,
+    "pH": pH,
+    "sulphates": sulphates,
+    "alcohol": alcohol
+}
+
+input_data = pd.DataFrame([input_dict])
+
+# 🔥 Force correct column order
+input_data = input_data[model.feature_names_in_]
 
 # Prediction
 if st.button("Predict"):
     prediction = model.predict(input_data)[0]
 
     if prediction == "white":
-        st.success("White Wine ")
+        st.success("White Wine 🍷")
     else:
-        st.error("Red Wine ")
+        st.error("Red Wine 🍷")
