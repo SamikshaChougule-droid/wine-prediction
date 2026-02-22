@@ -43,8 +43,8 @@ input_data = pd.DataFrame([[
     quality
 ]], columns=model.feature_names_in_)
 if st.button("predict"):
-    prediction = module.predict(input_data)[0]
-    if predication == "white":
-        st.succes("white wine")
+    prediction = model.predict(input_data)[0]
+    if prediction == "white":
+        st.success("white wine")
     else:
         st.error("red wine")
